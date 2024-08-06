@@ -1,9 +1,11 @@
 import bcrypt from 'bcrypt';
 import {PlatformManager} from './Managers/AccountManager.js';
 import {LicensesManager} from './Managers/UserLicenses.js';
-
+import {Request, Response} from 'express';
 export class Authentication {
-  constructor(request, response) {
+  req: Request;
+  res: Response;
+  constructor(request: Request, response: Response) {
     this.req = request;
     this.res = response;
   }
@@ -43,11 +45,11 @@ export class Authentication {
       const userData = await userDB.fetchUserData(UUID);
 
       //  Testing to see if we can send the cookies to the client
-      const time = require('../../com.arkasphere/utilites/time.js');
-      const days = new time();
+      //const time = require('../../com.arkasphere/utilites/time.js'); // WTF is this? HetMasterTje\
+      const time = new Date()
 
       // Calculate expiration time for cookies
-      const maxAge = days.days(30); // Assuming 30 days expiration
+      const maxAge = time.setDate(time.getDate()+30); // Assuming 30 days expiration
 
       // Cookies Directive
 
@@ -124,7 +126,7 @@ export class Authentication {
 
 // Licensing
 
-  async Userlicenses() {
+  async licenses(): Promise<Response<any, Record<string, any>>> {
     const { UUID, Secret } = this.req.body;
     try {
         const userDB = new LicensesManager();
@@ -141,7 +143,7 @@ export class Authentication {
             this.logAction('SecureKey incorrect for user: ' + UUID, 'ERROR', 'authentication');
             return this.Error("SecureKey INCORRECT");
         }
-        return true;
+        return this.res.status(200).json({ status: 'SUCCESS', licenses: user.Licenses });
 
     } catch (error) {
         console.error('Error during login:', error);
@@ -152,6 +154,9 @@ export class Authentication {
         }
     }
 }
+  logAction(arg0: string, arg1: string, arg2: string) {
+    throw new Error('Method not implemented.');
+  }
 
   info(message) {
     console.info("[Net.HetMasterTje] " + message);

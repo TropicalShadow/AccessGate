@@ -3,6 +3,8 @@ import path from 'path';
 import bcrypt from 'bcrypt';
 
 export class PlatformManagers {
+    filePath: string;
+    usersData: any;
     constructor(platform) {
         switch (platform) {
             case 'arkasphere':

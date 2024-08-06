@@ -1,7 +1,8 @@
 import {Authentication} from './authentication'
 import {Session} from './session'
+import { Express } from "express";
 
-export function registerRoutes(app) {
+export function registerRoutes(app: Express): void {
     app.post('/api/login/:platform/', (req, res) => {
         const auth = new Authentication(req, res);
         auth.login();
@@ -14,7 +15,8 @@ export function registerRoutes(app) {
 
     app.post('/api/logout/:platform/', (req, res) => {
         const auth = new Authentication(req, res);
-        auth.logoutforce();
+        console.log(auth);
+        /* auth.logoutforce(); */
     });
 
     app.post('/api/session/:platform/', (req, res) => {
