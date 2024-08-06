@@ -1,14 +1,14 @@
-const bcrypt = require('bcrypt');
-// const userDataPath = require('./Credentials.json'); // New Path
+import bcrypt from 'bcrypt';
+import path from 'path';
 
-// const filePath = path.join(__dirname, './Licenses.json');
+const filePath = path.join(__dirname, './Licenses.json');
 
-class LicensesManager {
+export class LicensesManager {
     constructor(platform) {
         switch (platform) {
-            case 'mcuniversal':
-                this.filePath = path.join(__dirname, './credentials/mcuniversal/ServerLicenses.json');  
-                break;
+            case 'arkasphere':
+                this.filePath = path.join(__dirname, './credentials/arkasphere/accounts.json');
+            break;
             // case 'server':
             //     this.filePath = path.join(__dirname, './Servers.json');
             //     break;
@@ -33,7 +33,7 @@ class LicensesManager {
     }
     async hashSecureKeys() {
         const users = this.readJSONFile();
-        for (let user of users) {
+        for (const user of users) {
             if (!user.Password) {
                 const hashedPassword = await bcrypt.hash(user.PlainPassword, 10); // 10 times hashing
                 user.Password = hashedPassword;
@@ -57,15 +57,3 @@ class LicensesManager {
 
 }
 
-
-(async () => {
-    try {
-        const userDB = new LicenseManager();
-        await userDB.hashSecureKeys();
-    } catch (error) {
-        console.error("Error hashing passwords:", error);
-    }
-})();
-
-
-module.exports = LicensesManager;

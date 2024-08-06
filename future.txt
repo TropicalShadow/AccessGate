@@ -1,1 +1,0 @@
-This is the beginning of the future API called AccessGate it manages all of the authenticating for the various programs on the website
